@@ -32,3 +32,33 @@ class HH_data_getter:
             "only_with_vacancies": True,
         }
         return requests.get("https://api.hh.ru/vacancies/", params=params).json()["items"]
+
+    def get_employers_list(self):
+        """
+        Метод формирует список вакансий в зависимости от выбранных компаний в списке
+        :return: vacancies_list: list
+        """
+        vacancies_list = []
+
+        for employer in self.employers:
+            response_vacancies = self.get_employers(self.employers[employer])
+            for vacancy in response_vacancies:
+                if vacancy["salary"]["from"] is None:
+                    salary = 0
+                else:
+                    salary = vacancy["salary"]["from"]
+
+                vacancies_list.append(
+                    {
+                        "url": vacancy["alternate_url"],
+                        "salary": salary,
+                        "vacancy_name": vacancy["name"],
+                        "employer": employer,
+                    }
+                )
+        return vacancies_list
+
+
+# cls_obj = HH_data_getter()
+# test_1 = cls_obj.get_employers_list()
+# print(test_1)
