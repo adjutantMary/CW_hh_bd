@@ -33,7 +33,7 @@ class HH_data_getter:
         }
         return requests.get("https://api.hh.ru/vacancies/", params=params).json()["items"]
 
-    def get_employers_list(self):
+    def get_vacancies_list(self):
         """
         Метод формирует список вакансий в зависимости от выбранных компаний в списке
         :return: vacancies_list: list
