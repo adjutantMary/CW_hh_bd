@@ -79,8 +79,8 @@ class HH_data_getter:
                 for employer in self.employers:
                     cur.execute(f'INSERT INTO companies values ('
                                 f'"{int(self.employers[employer])}", "{employer}")')
-                    conn.commit()
-                    conn.close()
+        conn.commit()
+        conn.close()
 
 
 
