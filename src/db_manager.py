@@ -1,31 +1,80 @@
 import psycopg2
+from src.hh_vacancies import HH_data_getter
 
 
 class DBManager:
     @staticmethod
     def get_companies_and_vacancies_count():
         """Метод получает список всех компаний и количество вакансий у каждой компании."""
-        pass
+        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
+                              password='jett_loves_sql40', host='localhost') as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    'SELECT company_name, COUNT(vacancy_name) '
+                    'FROM vacancies '
+                    'GROUP BY company_name;'
+                )
+                data = cur.fetchall()
+        conn.close()
+        return data
 
     @staticmethod
     def get_all_vacancies():
         """Метод получает список всех вакансий с указанием названия компании,
         названия вакансии и зарплаты и ссылки на вакансию"""
-        pass
+        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
+                              password='jett_loves_sql40', host='localhost') as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    'SELECT *'
+                    'FROM vacancies;'
+                )
+                data = cur.fetchall()
+        conn.close()
+        return data
 
     @staticmethod
     def get_avg_salary():
         """Метод получает среднюю зарплату по вакансиям."""
-        pass
+        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
+                              password='jett_loves_sql40', host='localhost') as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    'SELECT AVG(salary)'
+                    'FROM vacancies;'
+                )
+                data = cur.fetchall()
+        conn.close()
+        return data
 
     @staticmethod
     def get_vacancies_with_higher_salary():
         """Метод получает список всех вакансий, у которых зарплата выше средней по всем вакансиям"""
-        pass
+        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
+                              password='jett_loves_sql40', host='localhost') as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    'SELECT vacancy_name'
+                    'FROM vacancies'
+                    'WHERE salary > (SELECT AVG(salary) FROM vacancies);'
+                )
+                data = cur.fetchall()
+        conn.close()
+        return data
 
     @staticmethod
-    def get_vacancies_with_keyword():
+    def get_vacancies_with_keyword(keyword: str):
         """Метод получает список всех вакансий,
         в названии которых содержатся переданные в метод слова,
         например python."""
-        pass
+        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
+                              password='jett_loves_sql40', host='localhost') as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    'SELECT vacancy_name'
+                    'FROM vacancies'
+                    'WHERE LOWER(vacancy_name) LIKE LOWER(%s)', ('%' + keyword + '%',)
+                )
+                data = cur.fetchall()
+        conn.close()
+        return data
