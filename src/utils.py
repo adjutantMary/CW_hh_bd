@@ -49,6 +49,3 @@ def create_table():
             print(f"{err}: Таблица существует")
     conn.commit()
     conn.close()
-
-
-print(create_db('parser'))
