@@ -60,12 +60,14 @@ class HH_data_getter:
         return vacancies_list
 
     def vacancies_to_db(self):
-        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
-                              password='jett_loves_sql40', host='localhost') as conn:
+        '''Метод для добавления вакансий в базу данных'''
+        with psycopg2.connect(
+            dbname="hh_parser", user="postgres", password="postgres", host="localhost"
+        ) as conn:
             with conn.cursor() as cur:
                 for vacancy in self.get_vacancies_list():
                     cur.execute(
-                        f'INSERT INTO vacancies(vacancy_name, salary, company_name, vacancy_url) values'
+                        f"INSERT INTO vacancies(vacancy_name, salary, company_name, vacancy_url) values"
                         f"('{vacancy['vacancy_name']}', '{int(vacancy['salary'])}',"
                         f"'{vacancy['employer']}', '{vacancy['url']}')"
                     )
@@ -73,16 +75,15 @@ class HH_data_getter:
         conn.cursor()
 
     def employers_to_db(self):
-        with psycopg2.connect(dbname='hh_parcer', user='lacrimosa',
-                              password='jett_loves_sql40', host='localhost') as conn:
+        '''Метод для добавления работодателей в базу данных'''
+        with psycopg2.connect(
+            dbname="hh_parser", user="postgres", password="postgres", host="localhost"
+        ) as conn:
             with conn.cursor() as cur:
                 for employer in self.employers:
-                    cur.execute(f'INSERT INTO companies values ('
-                                f'"{int(self.employers[employer])}", "{employer}")')
+                    cur.execute(f"INSERT INTO companies values (" f'"{int(self.employers[employer])}", "{employer}")')
         conn.commit()
         conn.close()
-
-
 
 
 # cls_obj = HH_data_getter()
